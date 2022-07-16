@@ -1,101 +1,95 @@
 import { WalletAdapterNetwork } from "@solana/wallet-adapter-base";
-import {
-    clusterApiUrl,
-    Connection,
-    PublicKey,
-    Transaction,
-    SystemProgram,
-    LAMPORTS_PER_SOL,
-} from "@solana/web3.js";
+import { clusterApiUrl, Connection, PublicKey, Transaction } from "@solana/web3.js";
+import { createTransferCheckedInstruction, getAssociatedTokenAddress, getMint } from "@solana/spl-token";
 import BigNumber from "bignumber.js";
 import products from "./products.json";
 
-const sellerAddress = 'Cg7BVq43s2SBRceLtfuj5RFd9wrNVHCFvdjPhStCTsBR';
+const usdcAddress = new PublicKey("Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr");
+const sellerAddress = "Cg7BVq43s2SBRceLtfuj5RFd9wrNVHCFvdjPhStCTsBR";
 const sellerPublicKey = new PublicKey(sellerAddress);
 
-const createTransaction = async(req, res) => {
+const createTransaction = async (req, res) => {
     try {
-        // Extract transaction info from request body
         const { buyer, orderID, itemID } = req.body;
-
-        // if we dont have something we need, stop
         if (!buyer) {
-            return res.status(400).json({
+            res.status(400).json({
                 message: "Missing buyer address",
             });
         }
+
         if (!orderID) {
-            return res.status(400).json({
-                message: "OrderID missing",
+            res.status(400).json({
+                message: "Missing order ID",
             });
         }
-        // Fetch item price from products.json using itemID
-        const itemPrice = products.find((item) => item.id === item.id).price;
+
+        const itemPrice = products.find((item) => item.id === itemID).price;
 
         if (!itemPrice) {
-            return res.status(400).json({
-                message: "Item not found. Please check ID",
+            res.status(404).json({
+                message: "Item not found. please check item ID",
             });
         }
 
-        // Convert our price to correct format
         const bigAmount = BigNumber(itemPrice);
         const buyerPublicKey = new PublicKey(buyer);
+
         const network = WalletAdapterNetwork.Devnet;
         const endpoint = clusterApiUrl(network);
         const connection = new Connection(endpoint);
 
-        // Blockhash. Like an ID for block. Lets us identify the block
+        const buyerUsdcAddress = await getAssociatedTokenAddress(usdcAddress, buyerPublicKey);
+        const shopUsdcAddress = await getAssociatedTokenAddress(usdcAddress, sellerPublicKey);
         const { blockhash } = await connection.getLatestBlockhash("finalized");
 
-        // The first two things we need - a recent block ID
-        // and the public key of fee payer
+        // This is new, we're getting the mint address of the token we want to transfer
+        const usdcMint = await getMint(connection, usdcAddress);
+
         const tx = new Transaction({
             recentBlockhash: blockhash,
             feePayer: buyerPublicKey,
-            blockhash: blockhash,
         });
 
-        // This is the first "action" that the transaction will take
-        // We are just going to transfer some SOL
-        const transferInstruction = SystemProgram.transfer({
-            fromPubkey: buyerPublicKey,
-            lamports: bigAmount.multipliedBy(LAMPORTS_PER_SOL).toNumber(),
-            toPubkey: sellerPublicKey,
-        });
+        // Here we're creating a different type of transfer instruction
+        const transferInstruction = createTransferCheckedInstruction(
+            buyerUsdcAddress,
+            usdcAddress,     // This is the address of the token we want to transfer
+            shopUsdcAddress,
+            buyerPublicKey,
+            bigAmount.toNumber() * 10 ** (await usdcMint).decimals,
+            usdcMint.decimals // The token could have any number of decimals
+        );
 
-        // we are adding more instructions to the tx
+        // The rest remains the same
         transferInstruction.keys.push({
-            // we will use our OrderID to find this tx later
             pubkey: new PublicKey(orderID),
             isSigner: false,
             isWritable: false,
         });
+
         tx.add(transferInstruction);
 
-        // formatting our tx
-        const serializedInstruction = tx.serialize({
+        const serializedTransaction = tx.serialize({
             requireAllSignatures: false,
         });
-        const base64 = serializedInstruction.toString("base64");
+
+        const base64 = serializedTransaction.toString("base64");
 
         res.status(200).json({
-            transaction: base64
+            transaction: base64,
         });
-    }
-    catch (error) {
-        console.log(error);
+    } catch (err) {
+        console.error(err);
 
-        res.status(500).json({ error: "error creating tx" });
+        res.status(500).json({ error: "error creating transaction" });
         return;
     }
-}
+};
 
 export default function handler(req, res) {
-    if (req.method == "POST") {
+    if (req.method === "POST") {
         createTransaction(req, res);
-    }
-    else {
+    } else {
         res.status(405).end();
     }
 }

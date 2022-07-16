@@ -7,7 +7,7 @@ export default function Product({ product }) {
     return (
         <div className={styles.product_container}>
             <div>
-                <img className={styles.prodcut_image} src={image_url} alt={name} height={125} width={125}/>
+                <img className={styles.prodcut_image} src={image_url} alt={name} height={105} width={105}/>
             </div>
             <div className={styles.product_details}>
                 <div className={styles.product_text}>
