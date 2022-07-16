@@ -1,11 +1,11 @@
 [
     {
         "id": 1,
-        "name": "OG Emoji pack",
+        "name": "Aesthetic Rock 'n Roll pack",
         "price": "0.09",
-        "description": "Get this fire emoji pack for only $0.09! Includes 3 hot emojis: Forreal, Flooshed, and Sheesh!",
-        "image_url": "https://i.imgur.com/rVD8bjt.png",
-        "filename": "Emojis.zip",
-        "hash": "QmWWH69mTL66r3H8P4wUn24t1L5pvdTJGUTKBqT11KCHS5"
+        "description": "Get this aesthetic Rock 'n Roll pack for only $0.09! Includes 15 high quality images!",
+        "image_url": "https://user-images.githubusercontent.com/54990929/179360623-afa196ca-a95a-4bda-ae24-e79a35d372aa.jpg",
+        "filename": "aesthetic-rock-n-roll-pack.jpg",
+        "hash": "QmPFbhPT3QqmVR3JJG3f7pxzwxtf1WYVywcDstGB552XAe"
     }
 ]

@@ -1,13 +1,13 @@
 import React from "react";
 import styles from "../styles/Product.module.css";
-import IPFSDownload from "./IpfsDownload";
+import Buy from "./Buy";
 
 export default function Product({ product }) {
     const {id, name, price, description, image_url } = product;
     return (
         <div className={styles.product_container}>
             <div>
-                <img className={styles.prodcut_image} src={image_url} alt={name} height={100} width={100}/>
+                <img className={styles.prodcut_image} src={image_url} alt={name} height={125} width={125}/>
             </div>
             <div className={styles.product_details}>
                 <div className={styles.product_text}>
@@ -17,8 +17,7 @@ export default function Product({ product }) {
 
                 <div className={styles.product_action}>
                 <div className={styles.product_price}>{price} USDC</div>
-                {/* I'm hardcoding these for now, we'll fetch the hash from the API later*/}
-                <IPFSDownload filename="emojis.zip" hash="QmWWH69mTL66r3H8P4wUn24t1L5pvdTJGUTKBqT11KCHS5" cta="Download emojis"/>
+                    <Buy itemID={id} />
                 </div>
             </div>
         </div>
