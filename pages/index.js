@@ -1,14 +1,48 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Product from "../components/Product";
+
 import HeadComponent from '../components/Head';
+
+import { useWallet } from '@solana/wallet-adapter-react';
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 
 // Constants
 const BUILDSPACE_TWITTER_HANDLE = "_buildspace";
+const BUILDSPCE_TWITTER_LINK = `https://twitter.com/${BUILDSPACE_TWITTER_HANDLE}`;
 const PERSONAL_TWITTER_HANDLE = "0x_Rohit";
 const PERSONAL_TWITTER_LINK = `https://twitter.com/${PERSONAL_TWITTER_HANDLE}`;
-const BUILDSPCE_TWITTER_LINK = `https://twitter.com/${BUILDSPACE_TWITTER_HANDLE}`;
 
 const App = () => {
-  
+  const { publicKey } = useWallet();
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    if (publicKey) {
+      fetch(`api/fetchProducts`)
+      .then(response => response.json())
+      .then(data => {
+        setProducts(data);
+        console.log("Products", data);
+      })
+    }
+  }, [publicKey]);
+
+  const renderNotConnectedContainer = () => (
+    <div>
+      {/* <img src="https://user-images.githubusercontent.com/54990929/179293529-ea6692a2-7886-467a-bfe7-e0b24e9077bf.jpg" alt="emoji" height={350} width={450}/> */}
+      <div className="button-container">
+        <WalletMultiButton className="cta-button connect-wallet-button" />
+      </div>    
+    </div>
+  );
+
+  const renderItemBuyContainer = () => (
+    <div className="products-container">
+      {products.map((product) => (
+        <Product key={product.id} product={product} />
+      ))}
+    </div>
+  );
   
   return (
     <div className="App">
@@ -20,7 +54,7 @@ const App = () => {
         </header>
 
         <main>
-          <img src="https://user-images.githubusercontent.com/54990929/179293529-ea6692a2-7886-467a-bfe7-e0b24e9077bf.jpg" alt="emoji" height={350} width={450}/>
+          { publicKey ? renderItemBuyContainer() : renderNotConnectedContainer() }
         </main>
 
         <div className="footer-container">
