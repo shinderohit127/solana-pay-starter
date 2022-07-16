@@ -48,6 +48,7 @@ const createTransaction = async (req, res) => {
         const tx = new Transaction({
             recentBlockhash: blockhash,
             feePayer: buyerPublicKey,
+            blockhash: blockhash,
         });
 
         // Here we're creating a different type of transfer instruction
