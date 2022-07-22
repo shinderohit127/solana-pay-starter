@@ -82,7 +82,7 @@ const CreateProduct = () => {
                             <input
                                 className={styles.input}
                                 type="text"
-                                placeholder="0.01 USDC"
+                                placeholder="Price in USDC"
                                 onChange={(e) => {
                                     setNewProduct({ ...newProduct, price: e.target.value });
                                 }}

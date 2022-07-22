@@ -16,5 +16,14 @@
     "description": "Relive the nostalgia with this Guns N' Roses concert poster from 1988! Contains 1 high quality digital copy of the poster!",
     "filename": "gnr-poster.jpg",
     "hash": "QmZULeSPi7npKogZ9GshmGf9PAhzYyWEBB6m7p9GESS9iK"
+  },
+  {
+    "id": 3,
+    "name": "U2 The War Tour 1983 Poster",
+    "price": "0.99",
+    "image_url": "https://i.imgur.com/rSK0a85.jpg",
+    "description": "High quality digital copy of the U2 The War Tour 1983 concert poster!",
+    "filename": "u2-1983-poster.jpg",
+    "hash": "QmXWRpoFPdvw3sCSKhGt9v6vQ5Qa4U36xHv6UKh5J6WXZC"
   }
 ]
