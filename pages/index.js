@@ -56,7 +56,19 @@ const App = () => {
           <p className="sub-text">Rhythm and Blues, the crypto way</p>
 
           {isOwner && (
-            <button className="create-product-buttton" onClick={() => setCreating(!creating)}>
+            <button onClick={() => setCreating(!creating)} style={{
+              margin: 10,
+              border: 0,
+              fontSize: 20,
+              fontWeight: "bold",
+              position: "fixed",
+              top: 20,
+              right: 20,
+              cursor: "pointer",
+              color: "white",
+              backgroundColor: "transparent",
+              zIndex: 1,
+            }}>
               {creating ? "Close" : "Create Product"}
             </button>
           )}
