@@ -22,20 +22,28 @@ const App = () => {
   useEffect(() => {
     if (publicKey) {
       fetch(`api/fetchProducts`)
-      .then(response => response.json())
-      .then(data => {
-        setProducts(data);
-        console.log("Products", data);
-      })
+        .then(response => response.json())
+        .then(data => {
+          setProducts(data);
+          console.log("Products", data);
+        })
     }
   }, [publicKey]);
 
   const renderNotConnectedContainer = () => (
     <div>
       {/* <img src="https://user-images.githubusercontent.com/54990929/179293529-ea6692a2-7886-467a-bfe7-e0b24e9077bf.jpg" alt="emoji" height={350} width={450}/> */}
+      <div style={{ display: "inline", overflowX: "hidden", overflowY: "scroll" }}>
+        <h4 style={{textDecoration: "underline"}}>How to get started?</h4>
+        <p style={{marginBottom: 0}}><b>1.</b> Add the <a href="https://chrome.google.com/webstore/detail/phantom/bfnaelmomeimhlpmgjnjophhpkkoljpa" style={{color: "#d8243c"}} target="_blank">Phantom wallet</a> to your browser</p>
+        <p style={{marginTop: 0, marginBottom: 0}}><b>2.</b> Head over to this <a href="https://spl-token-faucet.com/?token-name=USDC?utm_source=buildspace.so&utm_medium=buildspace_project" style={{color: "#d8243c"}} target="_blank">faucet</a></p>
+        <p style={{marginTop: 0, marginBottom: 0}}><b>3.</b> Firstly, airdrop 1 SOL into your wallet</p>
+        <p style={{marginTop: 0, marginBottom: 0}}><b>4.</b> Now, airdrop 1000 USDC into your wallet</p>
+        <p style={{marginTop: 0, marginBottom: 0}}><b>5.</b> Enjoy the Vibe!!</p>
+      </div>
       <div className="button-container">
         <WalletMultiButton className="cta-button connect-wallet-button" />
-      </div>    
+      </div>
     </div>
   );
 
@@ -46,10 +54,10 @@ const App = () => {
       ))}
     </div>
   );
-  
+
   return (
     <div className="App">
-      <HeadComponent/>
+      <HeadComponent />
       <div className="container">
         <header className="header-container">
           <p className="header"> 🎸 The Rock n Roll Memorabilia Store 🤟</p>
@@ -76,8 +84,8 @@ const App = () => {
         </header>
 
         <main>
-          { creating && <CreateProduct /> }
-          { publicKey ? renderItemBuyContainer() : renderNotConnectedContainer() }
+          {creating && <CreateProduct />}
+          {publicKey ? renderItemBuyContainer() : renderNotConnectedContainer()}
         </main>
 
         <div className="footer-container">
@@ -87,7 +95,7 @@ const App = () => {
             href={PERSONAL_TWITTER_LINK}
             target="_blank"
             rel="noreferrer"
-          style={{marginRight: "5px"}}>{`built by @${PERSONAL_TWITTER_HANDLE}`}</a>
+            style={{ marginRight: "5px" }}>{`built by @${PERSONAL_TWITTER_HANDLE}`}</a>
           <a
             className="footer-text"
             href={BUILDSPCE_TWITTER_LINK}
